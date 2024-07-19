@@ -12,9 +12,16 @@ def register(request):
         if form.is_valid():
             user = form.save()
             return redirect('login')
+        else:
+            # Extract form errors
+            errors = {}
+            for field, error_list in form.errors.items():
+                errors[field] = error_list[0]  # Assuming you want only the first error message for each field
     else:
         form = RegisterForm()
-    return render(request, 'collegehub/register.html', {'form': form})
+        errors = {}
+
+    return render(request, 'collegehub/register.html', {'form': form, 'errors': errors})
 
 
 def login_view(request):
