@@ -6,258 +6,252 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-{% if form.errors and not form.non_field_errors %}
-<p class="errornote">
-    {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please
-    correct the errors below." %}{% endif %}
-</p>
-{% endif %}
 
-<style>
-    .vh-100 {
-        height: 100vh;
-    }
+    <style>
+        .vh-100 {
+            height: 100vh;
+        }
 
-    body {
-        margin: 0;
-        padding: 0;
-        background-image: url('{% static 'img/hurricane.jpg' %}');
-        background-size: cover;
-        background-position: center;
-        height: 100vh; /* Make the body take up the full viewport height */
-        font-family: 'Helvetica Neue', sans-serif; /* Use a modern font */
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('{% static 'img/file.png' %}');
+            background-size: cover;
+            background-position: center;
+            height: 100vh; /* Make the body take up the full viewport height */
+            font-family: 'Helvetica Neue', sans-serif; /* Use a modern font */
+        }
 
-    .container {
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
+        .container {
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
 
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-right: -15px;
-        margin-left: -15px;
-    }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
 
-    .justify-content-center {
-        justify-content: center;
-    }
+        .justify-content-center {
+            justify-content: center;
+        }
 
-    .align-items-center {
-        align-items: center;
-    }
+        .align-items-center {
+            align-items: center;
+        }
 
 
-    .card {
-        background: white;
-        border-radius: 1rem;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+        .card {
+            background: white;
+            border-radius: 1rem;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .g-0 {
-        margin-right: 0;
-        margin-left: 0;
-    }
+        .g-0 {
+            margin-right: 0;
+            margin-left: 0;
+        }
 
-    .col-md-6, .col-lg-5, .col-lg-7 {
-        position: relative;
-        width: 100%;
-        padding-right: 15px;
-        padding-left: 15px;
-    }
+        .col-md-6, .col-lg-5, .col-lg-7 {
+            position: relative;
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
 
-    .col-md-6.col-lg-5 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+        .col-md-6.col-lg-5 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .p-4, .p-lg-5 {
-        padding: 1.5rem;
-    }
+        .p-4, .p-lg-5 {
+            padding: 1.5rem;
+        }
 
-    .p-lg-5 {
-        padding: 3rem;
-    }
+        .p-lg-5 {
+            padding: 3rem;
+        }
 
-    .text-black {
-        color: black;
-    }
+        .text-black {
+            color: black;
+        }
 
-    .mb-3, .mb-4 {
-        margin-bottom: 1rem;
-    }
+        .mb-3, .mb-4 {
+            margin-bottom: 1rem;
+        }
 
-    .pb-1, .pb-3 {
-        padding-bottom: 0.25rem;
-    }
+        .pb-1, .pb-3 {
+            padding-bottom: 0.25rem;
+        }
 
-    .form-outline {
-        margin-bottom: 1rem;
-    }
+        .form-outline {
+            margin-bottom: 1rem;
+        }
 
-    .form-control {
-        width: 100%;
-        padding: 0.75rem;
-        margin-bottom: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 0.25rem;
-    }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+        }
 
-    .form-control-lg {
-        padding: 1rem;
-        font-size: 1.25rem;
-    }
+        .form-control-lg {
+            padding: 1rem;
+            font-size: 1.25rem;
+        }
 
-    .btn {
-        display: inline-block;
-        padding: 0.75rem 1.25rem;
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.5;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        user-select: none;
-        border: 1px solid transparent;
-        border-radius: 0.25rem;
-        background-color: black;
-        color: white;
-        cursor: pointer;
-    }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            background-color: black;
+            color: white;
+            cursor: pointer;
+        }
 
-    .btn-lg {
-        padding: 1rem 2rem;
-        font-size: 1.25rem;
-    }
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.25rem;
+        }
 
-    .btn-block {
-        display: block;
-        width: 100%;
-    }
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
 
-    .fw-bold {
-        font-weight: bold;
-    }
+        .fw-bold {
+            font-weight: bold;
+        }
 
-    .img-fluid {
-        max-width: 100%;
-        height: auto;
-    }
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
 
-    .small-logo {
-        max-width: 200px; /* Adjust this value to change the maximum width of the image */
-        height: auto; /* Ensures the image maintains its aspect ratio */
-    }
+        .small-logo {
+            max-width: 200px; /* Adjust this value to change the maximum width of the image */
+            height: auto; /* Ensures the image maintains its aspect ratio */
+        }
 
-    .h2 {
-        font-size: 2rem;
-    }
+        .h2 {
+            font-size: 2rem;
+        }
 
-    .text-danger {
-        color: red;
-    }
+        .text-danger {
+            color: red;
+        }
 
-</style>
+    </style>
 
-<section class="vh-100">
-    <div class="container">
-        <div class="card" style="border-radius: 1rem;">
-            <div class="row g-0">
-                <div class="col-md-6 col-lg-5 d-flex justify-content-center align-items-center"
-                     style="padding-top: 10px;">
-                    <img src="{% static 'img/NOAA_Logo.png' %}" alt="signup form" class="img-fluid small-logo"
-                         style="border-radius: 1rem 0 0 1rem;"/>
-                </div>
-                <div class="col-md-6 col-lg-7 d-flex align-items-center">
-                    <div class="card-body p-4 p-lg-5 text-black">
-                        {% if form.errors %}
-                        <p class="errornote text-danger fw-bold" style="color: red">
-                            {% trans "Please correct the errors below." %}
-                        </p>
-                        {% endif %}
+    <section class="vh-100">
+        <div class="container">
+            <div class="card" style="border-radius: 1rem;">
+                <div class="row g-0">
+                    <div class="col-md-6 col-lg-5 d-flex justify-content-center align-items-center"
+                         style="padding-top: 10px;">
+                        <img src="{% static 'img/file.png' %}" alt="signup form" class="img-fluid small-logo"/>
+                    </div>
+                    <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                        <div class="card-body p-4 p-lg-5 text-black">
+                            {% if form.errors %}
+                                <p class="errornote text-danger fw-bold" style="color: red">
+                                    {% trans "Please correct the errors below." %}
+                                </p>
+                            {% endif %}
 
-                        <form action="{% url 'register' %}" method="post" id="signup-form">
-                            {% csrf_token %}
-                            <div class="d-flex align-items-center mb-3 pb-1">
-                                <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
-                                <span class="h2 fw-bold mb-0">{% trans "Create your account" %}</span>
-                            </div>
-                            <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign up for a new
-                                account</h5>
+                            <form action="{% url 'register' %}" method="post" id="signup-form">
+                                {% csrf_token %}
+                                <div class="d-flex align-items-center mb-3 pb-1">
+                                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                                    <span class="h2 fw-bold mb-0">{% trans "Create your account" %}</span>
+                                </div>
+                                <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign up for a new
+                                    account</h5>
 
-                            <label class="form-label" for="form2Example17">{% trans "Username" %}</label>
-                            <div class="form-outline mb-4">
-                                {% if form.username.errors %}
-                                <div class="text-danger">{{ form.username.errors }}</div>
-                                {% endif %}
-                                <input type="text" id="form2Example17" class="form-control form-control-lg"
-                                       name="username">
-                            </div>
+                                <label class="form-label" for="form2Example17">{% trans "Username" %}</label>
+                                <div class="form-outline mb-4">
+                                    {% if form.username.errors %}
+                                        <div class="text-danger">{{ form.username.errors }}</div>
+                                    {% endif %}
+                                    <input type="text" id="form2Example17" class="form-control form-control-lg"
+                                           name="username">
+                                </div>
 
-                            <label class="form-label" for="form2Example18">{% trans "First Name" %}</label>
-                            <div class="form-outline mb-4">
-                                {% if form.first_name.errors %}
-                                <div class="text-danger">{{ form.first_name.errors }}</div>
-                                {% endif %}
-                                <input type="text" id="form2Example18" class="form-control form-control-lg"
-                                       name="first_name">
-                            </div>
+                                <label class="form-label" for="form2Example18">{% trans "First Name" %}</label>
+                                <div class="form-outline mb-4">
+                                    {% if form.first_name.errors %}
+                                        <div class="text-danger">{{ form.first_name.errors }}</div>
+                                    {% endif %}
+                                    <input type="text" id="form2Example18" class="form-control form-control-lg"
+                                           name="first_name">
+                                </div>
 
-                            <label class="form-label" for="form2Example19">{% trans "Last Name" %}</label>
-                            <div class="form-outline mb-4">
-                                {% if form.last_name.errors %}
-                                <div class="text-danger">{{ form.last_name.errors }}</div>
-                                {% endif %}
-                                <input type="text" id="form2Example19" class="form-control form-control-lg"
-                                       name="last_name">
-                            </div>
+                                <label class="form-label" for="form2Example19">{% trans "Last Name" %}</label>
+                                <div class="form-outline mb-4">
+                                    {% if form.last_name.errors %}
+                                        <div class="text-danger">{{ form.last_name.errors }}</div>
+                                    {% endif %}
+                                    <input type="text" id="form2Example19" class="form-control form-control-lg"
+                                           name="last_name">
+                                </div>
 
-                            <label class="form-label" for="form2Example20">{% trans "Email" %}</label>
-                            <div class="form-outline mb-4">
-                                {% if form.email.errors %}
-                                <div class="text-danger">{{ form.email.errors }}</div>
-                                {% endif %}
-                                <input type="email" id="form2Example20" class="form-control form-control-lg"
-                                       name="email">
-                            </div>
+                                <label class="form-label" for="form2Example20">{% trans "Email" %}</label>
+                                <div class="form-outline mb-4">
+                                    {% if form.email.errors %}
+                                        <div class="text-danger">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                    <input type="email" id="form2Example20" class="form-control form-control-lg"
+                                           name="email">
+                                </div>
 
-                            <label class="form-label" for="form2Example27">{% trans "Password" %}</label>
-                            <div class="form-outline mb-4">
-                                {% if form.password1.errors %}
-                                <div class="text-danger">{{ form.password1.errors }}</div>
-                                {% endif %}
-                                <input type="password" id="form2Example27" class="form-control form-control-lg"
-                                       name="password1">
-                            </div>
+                                <label class="form-label" for="form2Example27">{% trans "Password" %}</label>
+                                <div class="form-outline mb-4">
+                                    {% if form.password1.errors %}
+                                        <div class="text-danger">{{ form.password1.errors }}</div>
+                                    {% endif %}
+                                    <input type="password" id="form2Example27" class="form-control form-control-lg"
+                                           name="password1">
+                                </div>
 
-                            <label class="form-label" for="form2Example28">{% trans "Confirm Password" %}</label>
-                            <div class="form-outline mb-4">
-                                {% if form.password2.errors %}
-                                <div class="text-danger">{{ form.password2.errors }}</div>
-                                {% endif %}
-                                <input type="password" id="form2Example28" class="form-control form-control-lg"
-                                       name="password2">
-                            </div>
+                                <label class="form-label" for="form2Example28">{% trans "Confirm Password" %}</label>
+                                <div class="form-outline mb-4">
+                                    {% if form.password2.errors %}
+                                        <div class="text-danger">{{ form.password2.errors }}</div>
+                                    {% endif %}
+                                    <input type="password" id="form2Example28" class="form-control form-control-lg"
+                                           name="password2">
+                                </div>
 
-                            <div class="pt-1 mb-4">
-                                <button class="btn btn-lg btn-block" type="submit">Sign Up</button>
-                            </div>
+                                <div class="pt-1 mb-4">
+                                    <button class="btn btn-lg btn-block" type="submit">Sign Up</button>
+                                </div>
 
-                            <span>{% trans "Already have an account?" %} <a href="/login">{% trans "Login" %}</a></span>
-                        </form>
+                                <span>{% trans "Already have an account?" %} <a
+                                        href="/login">{% trans "Login" %}</a></span>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock %}

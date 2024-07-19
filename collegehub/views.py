@@ -10,9 +10,11 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()  # Save the user
-            return redirect('login')  # Redirect to the home page or any other page
-    return render(request, 'collegehub/register.html')
+            user = form.save()
+            return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, 'collegehub/register.html', {'form': form})
 
 
 def login_view(request):
@@ -22,6 +24,8 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             return redirect('home')
+        else:
+            form = RegisterForm()
     return render(request, 'collegehub/login.html')
 
 
