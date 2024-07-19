@@ -32,7 +32,7 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            form = RegisterForm()
+            form = AuthenticationForm()
     return render(request, 'collegehub/login.html')
 
 

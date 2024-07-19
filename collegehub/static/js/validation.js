@@ -1,14 +1,13 @@
 const form = document.getElementById('form')
-const firstname_input = document.getElementById('firstname-input')
-const lastname_input = document.getElementById('lastname-input')
+const firstname_input = document.getElementById('first_name-input')
+const lastname_input = document.getElementById('last_name-input')
 const email_input = document.getElementById('email-input')
-const password_input = document.getElementById('password-input')
-const repeat_password_input = document.getElementById('repeat-password-input')
+const password_input = document.getElementById('password1-input')
+const repeat_password_input = document.getElementById('password2-input')
 const username_input = document.getElementById('username-input')
 const error_message = document.getElementById('error-message')
 
 form.addEventListener('submit', (e) => {
-    //e.preventDefault()
     let errors = []
 
     if (firstname_input) {
@@ -22,6 +21,21 @@ form.addEventListener('submit', (e) => {
     }
 
 })
+
+if (typeof serverErrors !== 'undefined' && Object.keys(serverErrors).length > 0) {
+    let errors = [];
+    for (const [field, message] of Object.entries(serverErrors)) {
+        if (message === 'This password is too common.') {
+            password_input.parentElement.classList.add('incorrect');
+        }
+        const inputElement = document.getElementById(`${field}-input`);
+        if (inputElement) {
+            inputElement.parentElement.classList.add('incorrect');
+        }
+        errors.push(message);
+    }
+    error_message.innerText = errors.join(". ");
+}
 
 function getSignupFormErrors(firstname, lastname, email, password, repeatPassword, username) {
     let errors = []
@@ -47,6 +61,15 @@ function getSignupFormErrors(firstname, lastname, email, password, repeatPasswor
     }
     if (repeatPassword === '' || repeatPassword == null) {
         errors.push('Confirm password is required')
+        repeat_password_input.parentElement.classList.add('incorrect')
+    }
+    if (password.length < 8) {
+        errors.push('Password must have at least 8 characters')
+        password_input.parentElement.classList.add('incorrect')
+    }
+    if (password !== repeatPassword) {
+        errors.push('Password does not match confirm password')
+        password_input.parentElement.classList.add('incorrect')
         repeat_password_input.parentElement.classList.add('incorrect')
     }
     return errors
