@@ -78,6 +78,20 @@ form label {
     transition: 150ms ease;
 }
 
+.form-element {
+    box-sizing: border-box;
+    flex-grow: 1;
+    min-width: 0;
+    height: 50px;
+    padding: 0 1em; /* Adjust padding for select and input */
+    font: inherit;
+    border-radius: 0 10px 10px 0;
+    border: 2px solid var(--input-color);
+    border-left: none;
+    background-color: var(--input-color);
+    color: var(--text-color);
+}
+
 form input {
     box-sizing: border-box;
     flex-grow: 1;
@@ -91,16 +105,16 @@ form input {
     background-color: var(--input-color);
 }
 
-form input:hover {
+form input:hover, form select:hover {
     border-color: var(--accent-color);
 }
 
-form input:focus {
+form input:focus, form select:focus {
     outline: none;
     border-color: var(--text-color);
 }
 
-div:has(input:focus) > label {
+div:has(input:focus) > label, div:has(select:focus) > label {
     background-color: var(--text-color);
 }
 
@@ -151,10 +165,33 @@ form div.incorrect label {
     background-color: #f06272;
 }
 
-form div.incorrect input {
+form div.incorrect input, form div.incorrect select {
     border-color: #f06272;
 }
 
 #error-message {
     color: #f06272;;
+}
+
+form select {
+    box-sizing: border-box;
+    flex-grow: 1;
+    min-width: 0;
+    height: 50px;
+    padding: 0 1em;
+    font: inherit;
+    border-radius: 0 10px 10px 0;
+    border: 2px solid var(--input-color);
+    border-left: none;
+    background-color: var(--input-color);
+    color: var(--text-color);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    line-height: 50px;
+}
+
+form select option {
+    background-color: var(--base-color);
+    color: var(--text-color);
 }

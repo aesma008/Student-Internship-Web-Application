@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(UserCreationForm):
+    # TODO: ADD UNIVERSITY TO THE USER REGISTRATION FORM
     """
     Custom form used to allow users to sign up for the application
     """
