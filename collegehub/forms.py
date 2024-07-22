@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(UserCreationForm):
-    # TODO: ADD UNIVERSITY TO THE USER REGISTRATION FORM
     """
     Custom form used to allow users to sign up for the application
     """
@@ -17,9 +16,21 @@ class RegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=254, required=True)
     """The email address of the new user"""
 
+    university = forms.CharField(max_length=100, required=True)
+    """The university of the new user"""
+
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'university')
+
+    def clean_email(self):
+        """
+        Clean the email field specifically to ensure it is saved in lowercase
+        """
+        email = self.cleaned_data.get('email')
+        if email:
+            email = email.lower()
+        return email
 
     def clean(self):
         """
@@ -49,4 +60,3 @@ class RegisterForm(UserCreationForm):
         # If no validations were encountered, we can go ahead and return the cleaned data
         if len(validations) == 0:
             return cleaned_data
-

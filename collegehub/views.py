@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 
 from .forms import RegisterForm
+from .models import Profile
 
 
 def register(request):
@@ -11,6 +12,8 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Create or update the profile with the university field
+            Profile.objects.update_or_create(user=user, defaults={'university': form.cleaned_data.get('university')})
             return redirect('login')
         else:
             # Extract form errors
@@ -26,7 +29,11 @@ def register(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+
+        post_data = request.POST.copy()
+        post_data['username'] = post_data.get('username', '').lower()
+
+        form = AuthenticationForm(data=post_data)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
