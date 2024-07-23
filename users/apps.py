@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class CollegehubConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'collegehub'
+    name = 'users'

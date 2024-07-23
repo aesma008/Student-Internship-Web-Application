@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'collegehub',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +57,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),  # Global templates directory
-            os.path.join(BASE_DIR, 'collegehub', 'templates')  # App-specific templates directory
+            os.path.join(BASE_DIR, 'users', 'templates')  # App-specific templates directory
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -72,7 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'School.wsgi.application'
-AUTHENTICATION_BACKENDS = ['collegehub.backends.EmailBackend']
+AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -125,7 +125,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "collegehub/static",
+    BASE_DIR / "users/static",
 
 ]
 
