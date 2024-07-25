@@ -12,16 +12,24 @@
 <div class="wrapper">
     <h1>Login</h1>
     <p id="error-message"></p>
+    {% if messages %}
+        <div id="message-container">
+            {% for message in messages %}
+                <p class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message|safe }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form id="form" action="{{ app_path }}" method="post">
         {% csrf_token %}
         <div>
-            <label for="username-input">
+            <label for="email-input">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                      fill="#e8eaed">
-                    <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Z"/>
+                    <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z"/>
                 </svg>
             </label>
-            <input type="text" name="username" id="username-input" placeholder="Email">
+            <input type="text" name="username" id="email-input" placeholder="Email">
         </div>
         <div>
             <label for="password1-input">
