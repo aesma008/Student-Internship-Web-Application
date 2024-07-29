@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const toast = document.querySelector(".toast"),
-        closeIcon = document.querySelector(".close"),
+        closeIcon = document.querySelector(".close-toast"),
         progress = document.querySelector(".progress");
 
     if (toast) {
