@@ -1,0 +1,27 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/toast.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+{% if messages %}
+    <div class="toast-container">
+        {% for message in messages %}
+            <div class="toast {% if message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}success{% endif %}">
+                <div class="toast-content">
+                    {% if message.tags == 'error' %}
+                        <i class="fa-solid fa-exclamation check"></i>
+                    {% elif message.tags == 'warning' %}
+                        <i class="fa-sharp fa-solid fa-triangle-exclamation check"></i>
+                    {% else %}
+                        <i class="fas fa-solid fa-check check"></i>
+                    {% endif %}
+                    <div class="message">
+                        <span class="text text-1">{{ message.level_tag|title }}</span>
+                        <span class="text text-2">{{ message|safe }}</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-xmark close"></i>
+                <div class="progress"></div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<script src="{% static 'js/toast.js' %}"></script>

@@ -4,22 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Login</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
     <script type="text/javascript" src="{% static 'js/validation.js' %}" defer></script>
 </head>
-<body>
+<body class="login-body">
 <div class="wrapper">
     <h1>Login</h1>
     <p id="error-message"></p>
-    {% if messages %}
-        <div id="message-container">
-            {% for message in messages %}
-                <p class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message|safe }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
-
+    {% include "collegehub/toast.html" %}
     <form id="form" action="{{ app_path }}" method="post">
         {% csrf_token %}
         <div>

@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.safestring import mark_safe
 
 from .forms import RegisterForm
 from .models import Profile
@@ -46,8 +47,9 @@ def activateEmail(request, user, to_email):
     })
     email = EmailMessage(mail_subject, message, to=[to_email])
     if email.send():
-        messages.success(request, f'Hello <b>{user}</b>, please check your <b>{to_email}</b> inbox to complete '
-                                  f'registration of your account. <b>Note:</b> Check your spam folder.')
+        messages.success(request, mark_safe(f'Hello <b>{user}</b>, please check your <b>{to_email}</b> inbox to '
+                                            f'complete'
+                                            f'registration of your account. <b>Note:</b> Check your spam folder.'))
     else:
         messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
 
@@ -85,6 +87,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            messages.success(request, "Successfully Logged in.")
             return redirect('home')
         else:
             # Extract form errors
@@ -103,5 +106,11 @@ def home_view(request):
 
 
 def logout_view(request):
+    # Clear any existing messages
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
+
     logout(request)
+    messages.success(request, "Successfully logged out.")
     return redirect('/login')
