@@ -4,15 +4,27 @@ const body = document.querySelector("body"),
     modeSwitch = body.querySelector(".mode"),
     modeText = body.querySelector(".mode-text");
 
-modeSwitch.addEventListener("click", () => {
-    body.classList.toggle("dark")
-    if (body.classList.contains("dark")) {
-        modeText.innerText = "Light Mode"
+// Function to apply the theme
+function applyTheme(theme) {
+    if (theme === "dark") {
+        body.classList.add("dark");
+        modeText.innerText = "Light Mode";
     } else {
-        modeText.innerText = "Dark Mode"
+        body.classList.remove("dark");
+        modeText.innerText = "Dark Mode";
     }
+}
+
+// Load theme preference from local storage and apply it
+const currentTheme = localStorage.getItem("theme") || "light";
+applyTheme(currentTheme);
+
+modeSwitch.addEventListener("click", () => {
+    const newTheme = body.classList.contains("dark") ? "light" : "dark";
+    applyTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
 });
 
 toggle.addEventListener("click", () => {
-    sidebar.classList.toggle("close")
+    sidebar.classList.toggle("close");
 });
