@@ -155,7 +155,7 @@ def password_reset_view(request):
                         user.save()
                         update_session_auth_hash(request, user)  # Important to update session with new password
                         messages.success(request, "Password updated successfully.")
-                        return redirect('settings')
+                        return redirect('home')
                     except ValidationError as e:
                         messages.error(request, "<br>".join(e.messages))
             else:
