@@ -136,22 +136,31 @@ def settings_view(request):
     return render(request, 'collegehub/settings.html')
 
 
+@clear_messages
 @login_required(login_url="/login/")
 def password_reset_view(request):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
     user = request.user
     if request.method == 'POST':
         password1 = request.POST.get('password1')
-        try:
-            validate_password(password1, user)
-            password1 = request.POST.get('password1')
-            user.set_password(password1)
-            user.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, "Password updated successfully.")
-            return redirect('settings')
-        except ValidationError as e:
-            messages.error(request, "<br>".join(e.messages))
+        password2 = request.POST.get('password2')
+
+        if password1 and password2:
+            if password1 == password2:
+                if user.check_password(password1):
+                    messages.error(request, "The new password cannot be the same as the current password.")
+                else:
+                    try:
+                        validate_password(password1, user)  # Validate the new password
+                        user.set_password(password1)
+                        user.save()
+                        update_session_auth_hash(request, user)  # Important to update session with new password
+                        messages.success(request, "Password updated successfully.")
+                        return redirect('settings')
+                    except ValidationError as e:
+                        messages.error(request, "<br>".join(e.messages))
+            else:
+                messages.error(request, "Passwords do not match")
+        else:
+            messages.error(request, "Please fill out both fields.")
+
     return render(request, 'collegehub/password_reset.html')
