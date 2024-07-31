@@ -146,8 +146,8 @@ form select option {
     background-color: var(--primary-color-light);
     color: var(--text-color);
 }
-form button {
 
+.btn-primary {
     margin-top: 10px;
     border: none;
     border-radius: 1000px;
@@ -160,11 +160,11 @@ form button {
     cursor: pointer;
 }
 
-form button:hover {
+.btn-primary:hover {
     background-color: var(--text-color);
 }
 
-form button:focus {
+.btn-primary:focus {
     outline: none;
     background-color: var(--text-color);
 }
