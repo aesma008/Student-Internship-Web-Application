@@ -114,3 +114,13 @@ def logout_view(request):
     logout(request)
     messages.success(request, "Successfully logged out.")
     return redirect('/login')
+
+
+@login_required(login_url="/login/")
+def settings_view(request):
+    return render(request, 'collegehub/settings.html')
+
+
+@login_required(login_url="/login/")
+def password_reset_view(request):
+    return render(request, 'collegehub/password_reset.html')

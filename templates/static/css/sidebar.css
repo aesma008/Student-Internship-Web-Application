@@ -13,7 +13,7 @@
     --primary-color: #F9A100;
     --primary-color-light: #F6F5FF;
     --toggle-color: #DDD;
-    --text-color: #707070;
+    --text-color: #2E2B41;
 
     --tran-02: all 0.2s ease;
     --tran-03: all 0.3s ease;
@@ -62,7 +62,7 @@ body.dark {
     opacity: 1;
 }
 
-.sidebar .image {
+.sidebar .image-profile {
     min-width: 60px;
     display: flex;
     align-items: center;

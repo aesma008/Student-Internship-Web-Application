@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-    --accent-color: #F9A100;
-    --base-color: white;
-    --text-color: #2E2B41;
-    --input-color: #FEF3BD;
+    --accent-color-register: #F9A100;
+    --base-color-register: white;
+    --text-color-register: #2E2B41;
+    --input-color-register: #FEF3BD;
 }
 
 * {
@@ -15,7 +15,7 @@
 html {
     font-family: Poppins, Segoe UI, sans-serif;
     font-size: 12pt;
-    color: var(--text-color);
+    color: var(--text-color-register);
     text-align: center;
 }
 
@@ -29,7 +29,7 @@ body.login-body, body.register-body {
 
 .wrapper {
     box-sizing: border-box;
-    background-color: var(--base-color);
+    background-color: var(--base-color-register);
     height: 100vh;
     width: max(40%, 600px);
     padding: 10px;
@@ -66,9 +66,9 @@ form label {
     flex-shrink: 0;
     height: 50px;
     width: 50px;
-    background-color: var(--accent-color);
-    fill: var(--base-color);
-    color: var(--base-color);
+    background-color: var(--accent-color-register);
+    fill: var(--base-color-register);
+    color: var(--base-color-register);
     border-radius: 10px 0 0 10px;
     display: flex;
     justify-content: center;
@@ -86,10 +86,10 @@ form label {
     padding: 0 1em; /* Adjust padding for select and input */
     font: inherit;
     border-radius: 0 10px 10px 0;
-    border: 2px solid var(--input-color);
+    border: 2px solid var(--input-color-register);
     border-left: none;
-    background-color: var(--input-color);
-    color: var(--text-color);
+    background-color: var(--input-color-register);
+    color: var(--text-color-register);
 }
 
 form input {
@@ -100,26 +100,26 @@ form input {
     padding: 1em;
     font: inherit;
     border-radius: 0 10px 10px 0;
-    border: 2px solid var(--input-color);
+    border: 2px solid var(--input-color-register);
     border-left: none;
-    background-color: var(--input-color);
+    background-color: var(--input-color-register);
 }
 
 form input:hover, form select:hover {
-    border-color: var(--accent-color);
+    border-color: var(--accent-color-register);
 }
 
 form input:focus, form select:focus {
     outline: none;
-    border-color: var(--text-color);
+    border-color: var(--text-color-register);
 }
 
 div:has(input:focus) > label, div:has(select:focus) > label {
-    background-color: var(--text-color);
+    background-color: var(--text-color-register);
 }
 
 form input::placeholder {
-    color: var(--text-color);
+    color: var(--text-color-register);
 }
 
 form button {
@@ -127,8 +127,8 @@ form button {
     border: none;
     border-radius: 1000px;
     padding: .85em 4em;
-    background-color: var(--accent-color);
-    color: var(--base-color);
+    background-color: var(--accent-color-register);
+    color: var(--base-color-register);
     font: inherit;
     font-weight: 600;
     text-transform: uppercase;
@@ -136,17 +136,17 @@ form button {
 }
 
 form button:hover {
-    background-color: var(--text-color);
+    background-color: var(--text-color-register);
 }
 
 form button:focus {
     outline: none;
-    background-color: var(--text-color);
+    background-color: var(--text-color-register);
 }
 
 a {
     text-decoration: none;
-    color: var(--accent-color);
+    color: var(--accent-color-register);
 }
 
 a:hover {
@@ -199,10 +199,10 @@ form select {
     padding: 0 1em;
     font: inherit;
     border-radius: 0 10px 10px 0;
-    border: 2px solid var(--input-color);
+    border: 2px solid var(--input-color-register);
     border-left: none;
-    background-color: var(--input-color);
-    color: var(--text-color);
+    background-color: var(--input-color-register);
+    color: var(--text-color-register);
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -210,6 +210,6 @@ form select {
 }
 
 form select option {
-    background-color: var(--base-color);
-    color: var(--text-color);
+    background-color: var(--base-color-register);
+    color: var(--text-color-register);
 }

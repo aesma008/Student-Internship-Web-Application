@@ -1,0 +1,84 @@
+{% extends 'static/html/base.html' %}
+{% load static %}
+{% block title %}Settings{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+{% endblock %}
+{% block content %}
+    {% include "static/html/toast.html" %}
+    <section class="home">
+        <div class="profile-card">
+            <div class="image">
+                <img src="https://m.media-amazon.com/images/I/71D3K29BgWL._AC_UY1000_.jpg" alt="" class="profile-img">
+            </div>
+            <div class="text-data">
+                <span class="name">{{ user.first_name }} {{ user.last_name }}</span>
+                <span class="university">{{ user.profile.university }}</span>
+            </div>
+            <form action="{% url 'settings' %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="first_name-input">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                             fill="#e8eaed">
+                            <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
+                        </svg>
+                    </label>
+                    <input type="text" name="first_name" id="first_name-input" placeholder="Firstname"
+                           value="{{ user.first_name }}" disabled>
+                </div>
+                <div>
+                    <label for="last_name-input">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                             fill="#e8eaed">
+                            <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
+                        </svg>
+                    </label>
+                    <input type="text" name="last_name" id="last_name-input" placeholder="Lastname"
+                           value="{{ user.last_name }}" disabled>
+                </div>
+                <div>
+                    <label for="email-input">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                             fill="#e8eaed">
+                            <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z"/>
+                        </svg>
+                    </label>
+                    <input type="email" name="email" id="email-input" placeholder="Email" value="{{ user.email }}"
+                           disabled>
+                </div>
+                <div>
+                    <label for="username-input">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                             fill="#e8eaed">
+                            <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Z"/>
+                        </svg>
+                    </label>
+                    <input type="text" name="username" id="username-input" placeholder="Username"
+                           value="{{ user.username }}" disabled>
+                </div>
+                <div>
+                    <label for="university-select">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                             fill="#e8eaed">
+                            <path d="M840-280v-276L480-360 40-600l440-240 440 240v320h-80ZM480-120 200-272v-200l280 152 280-152v200L480-120Z"/>
+                        </svg>
+                    </label>
+                    <select name="university" id="university-select">
+                        <option value="" disabled {% if not user.profile.university %}selected{% endif %}>School
+                        </option>
+                        <option value="FIU" {% if user.profile.university == "FIU" %}selected{% endif %}>Florida
+                            International University
+                        </option>
+                        <option value="RU" {% if user.profile.university == "RU" %}selected{% endif %}>Regis
+                            University
+                        </option>
+                    </select>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+            <button onclick="window.location.href='/password_reset'">Update Password</button>
+            <button onclick="window.location.href='/home'">Cancel</button>
+        </div>
+    </section>
+{% endblock %}
