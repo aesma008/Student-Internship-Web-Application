@@ -13,15 +13,14 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.safestring import mark_safe
 
+from .decorators import clear_messages, anonymous_required
 from .forms import RegisterForm
 from .models import Profile
 from .tokens import account_activation_token
 
 
+@clear_messages
 def activate(request, uidb64, token):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -41,10 +40,8 @@ def activate(request, uidb64, token):
     return redirect('login')
 
 
+@clear_messages
 def activateEmail(request, user, to_email):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
     mail_subject = "Activate your user account."
     message = render_to_string("collegehub/template_activate_account.html", {
         'user': user.username,
@@ -62,10 +59,9 @@ def activateEmail(request, user, to_email):
         messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
 
 
+@clear_messages
+@anonymous_required
 def register(request):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -88,12 +84,10 @@ def register(request):
     return render(request, 'collegehub/register.html', {'form': form, 'errors': errors})
 
 
+@clear_messages
+@anonymous_required
 def login_view(request):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
     if request.method == 'POST':
-
         post_data = request.POST.copy()
         post_data['username'] = post_data.get('username', '').lower()
 
@@ -114,33 +108,22 @@ def login_view(request):
     return render(request, 'collegehub/login.html', {'form': form, 'errors': errors})
 
 
+@clear_messages
 @login_required(login_url="/login/")
 def home_view(request):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
     return render(request, 'collegehub/home.html')
 
 
+@clear_messages
 def logout_view(request):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
-    # Clear any existing messages
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
-
     logout(request)
     messages.success(request, "Successfully logged out.")
     return redirect('/login')
 
 
+@clear_messages
 @login_required(login_url="/login/")
 def settings_view(request):
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Iterate through and consume existing messages
     user = request.user
     if request.method == 'POST':
         university = request.POST.get('university')
