@@ -118,6 +118,15 @@ def logout_view(request):
 
 @login_required(login_url="/login/")
 def settings_view(request):
+    user = request.user
+    if request.method == 'POST':
+        university = request.POST.get('university')
+        if university:
+            user.profile.university = university
+            user.profile.save()
+            messages.success(request, "Profile saved successfully.")
+        else:
+            messages.error(request, "Profile failed to save")
     return render(request, 'collegehub/settings.html')
 
 
