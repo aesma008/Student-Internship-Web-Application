@@ -1,7 +1,9 @@
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 
 from django.contrib import messages
-from django.contrib.auth import login, get_user_model, logout
+from django.contrib.auth import login, get_user_model, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
@@ -17,6 +19,9 @@ from .tokens import account_activation_token
 
 
 def activate(request, uidb64, token):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -37,6 +42,9 @@ def activate(request, uidb64, token):
 
 
 def activateEmail(request, user, to_email):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
     mail_subject = "Activate your user account."
     message = render_to_string("collegehub/template_activate_account.html", {
         'user': user.username,
@@ -55,6 +63,9 @@ def activateEmail(request, user, to_email):
 
 
 def register(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -78,6 +89,9 @@ def register(request):
 
 
 def login_view(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
     if request.method == 'POST':
 
         post_data = request.POST.copy()
@@ -102,10 +116,16 @@ def login_view(request):
 
 @login_required(login_url="/login/")
 def home_view(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
     return render(request, 'collegehub/home.html')
 
 
 def logout_view(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
     # Clear any existing messages
     storage = messages.get_messages(request)
     for _ in storage:
@@ -118,18 +138,37 @@ def logout_view(request):
 
 @login_required(login_url="/login/")
 def settings_view(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
     user = request.user
     if request.method == 'POST':
         university = request.POST.get('university')
-        if university:
+        if user.profile.university != university:
             user.profile.university = university
             user.profile.save()
             messages.success(request, "Profile saved successfully.")
         else:
-            messages.error(request, "Profile failed to save")
+            messages.error(request, "Please make a change!")
     return render(request, 'collegehub/settings.html')
 
 
 @login_required(login_url="/login/")
 def password_reset_view(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Iterate through and consume existing messages
+    user = request.user
+    if request.method == 'POST':
+        password1 = request.POST.get('password1')
+        try:
+            validate_password(password1, user)
+            password1 = request.POST.get('password1')
+            user.set_password(password1)
+            user.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Password updated successfully.")
+            return redirect('settings')
+        except ValidationError as e:
+            messages.error(request, "<br>".join(e.messages))
     return render(request, 'collegehub/password_reset.html')
