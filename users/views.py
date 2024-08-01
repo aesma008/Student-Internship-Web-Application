@@ -1,3 +1,6 @@
+import os
+
+from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
@@ -127,12 +130,30 @@ def settings_view(request):
     user = request.user
     if request.method == 'POST':
         university = request.POST.get('university')
-        if user.profile.university != university:
+        profile_picture = request.FILES.get('profile_picture')
+
+        changes_made = False
+
+        if university and user.profile.university != university:
             user.profile.university = university
+            changes_made = True
+
+        if profile_picture:
+            # Remove the old profile picture file if it's not the default one
+            if user.profile.profile_picture.name != 'default_profile_picture.jpg':
+                old_file_path = os.path.join(settings.MEDIA_ROOT, user.profile.profile_picture.name)
+                if os.path.exists(old_file_path):
+                    os.remove(old_file_path)
+
+            user.profile.profile_picture = profile_picture
+            changes_made = True
+
+        if changes_made:
             user.profile.save()
             messages.success(request, "Profile saved successfully.")
         else:
             messages.error(request, "Please make a change!")
+
     return render(request, 'collegehub/settings.html')
 
 

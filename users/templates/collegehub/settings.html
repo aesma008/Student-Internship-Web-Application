@@ -8,14 +8,19 @@
     {% include "static/html/toast.html" %}
     <section class="home">
         <div class="profile-card">
-            <div class="image">
-                <img src="https://m.media-amazon.com/images/I/71D3K29BgWL._AC_UY1000_.jpg" alt="" class="profile-img">
-            </div>
-            <div class="text-data">
-                <span class="name">{{ user.first_name }} {{ user.last_name }}</span>
-                <span class="university">{{ user.profile.university }}</span>
-            </div>
-            <form action="{% url 'settings' %}" method="post">
+            <form action="{% url 'settings' %}" method="post" enctype="multipart/form-data">
+                <div class="image">
+                    <label for="profile-picture-input">
+                        <img src="
+                                {% if user.profile.profile_picture.url %}{{ user.profile.profile_picture.url }}{% endif %}"
+                             alt="Profile Picture" class="profile-img">
+                    </label>
+                    <input type="file" name="profile_picture" id="profile-picture-input" style="display: none;">
+                </div>
+                <div class="text-data">
+                    <span class="name">{{ user.first_name }} {{ user.last_name }}</span>
+                    <span class="university">{{ user.profile.university }}</span>
+                </div>
                 {% csrf_token %}
                 <div>
                     <label for="first_name-input">

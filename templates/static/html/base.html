@@ -14,7 +14,8 @@
     <header>
         <div class="image-text">
             <span class="image-profile">
-                <img src="https://m.media-amazon.com/images/I/71D3K29BgWL._AC_UY1000_.jpg"
+                <img src="
+                        {% if user.profile.profile_picture.url %}{{ user.profile.profile_picture.url }}{% endif %}"
                      alt="logo">
             </span>
             <div class="text header-text">
