@@ -20,3 +20,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # The user who posts the review
+    company = models.CharField(max_length=255)  # Company name
+    rating = models.PositiveIntegerField()  # Rating (e.g., 1-5)
+    opinion = models.TextField()  # Opinion text
+    date_posted = models.DateTimeField(auto_now_add=True)  # Timestamp of when the review was posted

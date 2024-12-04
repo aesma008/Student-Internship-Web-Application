@@ -80,7 +80,7 @@ AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'collegehub',
+        'NAME': 'internship',
         'USER': 'user',
         'PASSWORD': '1234',
         'HOST': 'localhost',  # Set to 'localhost' if using locally
@@ -92,7 +92,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_FROM = 'arvesmailzadeh@gmail.com'
 EMAIL_HOST_USER = 'arvesmailzadeh@gmail.com'
-EMAIL_HOST_PASSWORD = 'alulwcknkjexhxmk'
+EMAIL_HOST_PASSWORD = 'ptrzgtmzlocmssjm'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

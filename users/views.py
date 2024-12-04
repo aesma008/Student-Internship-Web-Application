@@ -18,7 +18,7 @@ from django.utils.safestring import mark_safe
 
 from .decorators import clear_messages, anonymous_required
 from .forms import RegisterForm
-from .models import Profile
+from .models import Profile, Review
 from .tokens import account_activation_token
 
 
@@ -185,3 +185,33 @@ def password_reset_view(request):
             messages.error(request, "Please fill out both fields.")
 
     return render(request, 'collegehub/password_reset.html')
+
+
+@clear_messages
+@login_required(login_url="/login/")
+def post_a_review(request):
+    if request.method == 'POST':
+        company = request.POST.get('company')
+        rating = request.POST.get('rating')
+        opinion = request.POST.get('opinion')
+
+        if company and rating and opinion:
+            try:
+                rating = int(rating)
+                if 1 <= rating <= 5:  # Validate rating within a range (e.g., 1-5 stars)
+                    review = Review.objects.create(
+                        user=request.user,
+                        company=company,
+                        rating=rating,
+                        opinion=opinion,
+                    )
+                    messages.success(request, 'Your review has been posted successfully!')
+                    return redirect('post-a-review')  # Redirect to a relevant page
+                else:
+                    messages.error(request, 'Please provide a rating between 1 and 5.')
+            except ValueError:
+                messages.error(request, 'Invalid rating value. Please enter a number between 1 and 5.')
+        else:
+            messages.error(request, 'All fields are required.')
+
+    return render(request, 'collegehub/post_a_review.html')
