@@ -2,7 +2,7 @@
 .content {
     flex-grow: 1;
     padding: 20px;
-    background-color: #f5f7fa;
+    background-color: var(--body-color);
     overflow-y: auto;
     transition: margin-left 0.3s ease;
 }
@@ -17,7 +17,7 @@
 
 .home {
     padding: 20px;
-    background-color: #f5f7fa;
+    background-color: var(--body-color);
     min-height: calc(100vh - 60px);
     box-sizing: border-box;
 }
@@ -30,7 +30,7 @@
 .home-header h1 {
     font-size: 28px;
     font-weight: bold;
-    color: #333;
+    color: var(--text-color);
     margin-bottom: 10px;
 }
 
@@ -156,16 +156,9 @@
 
 .home {
     padding: 20px;
-    background-color: #f5f7fa;
+    background-color: var(--body-color);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.home .text {
-    font-size: 30px;
-    font-weight: 500;
-    color: var(--text-color);
-    padding: 8px 40px;
 }
