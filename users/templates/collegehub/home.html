@@ -3,9 +3,48 @@
 
 {% block title %}Home{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block content %}
+<section class="home">
     {% include "static/html/toast.html" %}
-    <section class="home">
-        <div class="text">Dashboard</div>
-    </section>
+    <div class="home-header">
+        <h1>Welcome, {{ user.first_name }}!</h1>
+        <p>Explore internship reviews or share your experience.</p>
+    </div>
+
+    <div class="home-actions">
+        <form method="GET" action="/home/" class="search-form">
+            <input type="text" name="query" placeholder="Search by keyword..." value="{{ query }}">
+            <input type="text" name="company" placeholder="Company name..." value="{{ company }}">
+            <select name="rating">
+                <option value="">Select Rating</option>
+                <option value="5">5 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="2">2 Stars</option>
+                <option value="1">1 Star</option>
+            </select>
+            <button type="submit" class="btn-primary">Search</button>
+        </form>
+        <a href="{% url 'post-a-review' %}" class="btn-secondary">Post a Review</a>
+    </div>
+
+    <div class="reviews-container">
+        {% for review in reviews %}
+        <div class="review-card">
+            <div class="card-header">
+                <h3>{{ review.company }}</h3>
+                <span class="rating">⭐ {{ review.rating }}/5</span>
+            </div>
+            <p class="opinion">{{ review.opinion|truncatewords:25 }}</p>
+            <p class="meta">Posted by {{ review.user.username }} on {{ review.date_posted|date:"F j, Y" }}</p>
+        </div>
+        {% empty %}
+        <p class="no-reviews">No reviews found. Try adjusting your search filters.</p>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

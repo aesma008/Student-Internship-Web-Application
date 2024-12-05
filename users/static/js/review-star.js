@@ -1,18 +1,18 @@
-const allStar = document.querySelectorAll('.rating .star');
-const ratingValue = document.querySelector('.rating input[name="rating"]'); // Ensuring the correct input is targeted
+// Select all star elements and the hidden input field for the rating
+const allStars = document.querySelectorAll('.rating .star');
+const ratingInput = document.querySelector('.rating input[name="rating"]');
 
-allStar.forEach((item, idx) => {
-    item.addEventListener('click', function () {
-        ratingValue.value = idx + 1; // Set rating value to the hidden input field
+document.addEventListener("DOMContentLoaded", () => {
+    const stars = document.querySelectorAll(".rating .star");
+    const ratingInput = document.querySelector("input[name='rating']");
 
-        allStar.forEach((star, starIdx) => {
-            if (starIdx <= idx) {
-                star.classList.replace('bx-star', 'bxs-star'); // Change to filled star
-                star.classList.add('active');
-            } else {
-                star.classList.replace('bxs-star', 'bx-star'); // Change to empty star
-                star.classList.remove('active');
-            }
+    stars.forEach((star, index) => {
+        star.addEventListener("click", () => {
+            ratingInput.value = index + 1;
+            stars.forEach((s, i) => {
+                s.classList.toggle("bxs-star", i <= index);
+                s.classList.toggle("bx-star", i > index);
+            });
         });
     });
 });

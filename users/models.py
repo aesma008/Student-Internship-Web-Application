@@ -28,3 +28,6 @@ class Review(models.Model):
     rating = models.PositiveIntegerField()  # Rating (e.g., 1-5)
     opinion = models.TextField()  # Opinion text
     date_posted = models.DateTimeField(auto_now_add=True)  # Timestamp of when the review was posted
+    
+    def __str__(self):
+        return f"{self.company} - {self.user.username}"

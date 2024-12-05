@@ -10,68 +10,81 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-<nav class="sidebar close">
-    <header>
-        <div class="image-text">
-            <span class="image-profile">
-                <img src="
-                        {% if user.profile.profile_picture.url %}{{ user.profile.profile_picture.url }}{% endif %}"
-                     alt="logo">
-            </span>
-            <div class="text header-text">
-                <span class="name">Internship App</span>
-                <span class="profession">{{ user.first_name }} {{ user.last_name }}</span>
+<div class="layout">
+    <!-- Sidebar -->
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                    <span class="image-profile">
+                        <img src="
+                                
+                                
+                                
+                                {% if user.profile.profile_picture.url %}{{ user.profile.profile_picture.url }}{% endif %}"
+                             alt="Profile Picture">
+                    </span>
+                <div class="text header-text">
+                    <span class="name">Internship App</span>
+                    <span class="profession">{{ user.first_name }} {{ user.last_name }}</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="/home/">
+                            <i class='bx bx-home-alt icon'></i>
+                            <span class="text nav-text">Reviews</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="/post-a-review/">
+                            <i class='bx bxs-edit icon'></i>
+                            <span class="text nav-text">Post A Review</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="/settings/">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                    <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark Mode</span>
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
             </div>
         </div>
-        <i class='bx bx-chevron-right toggle'></i>
-    </header>
-    <div class="menu-bar">
-        <div class="menu">
-            <ul class="menu-links">
-                <li class="nav-link">
-                    <a href="/settings/">
-                        <i class='bx bx-cog icon'></i>
-                        <span class="text nav-text">Settings</span>
-                    </a>
-                </li>
-                <li class="nav-link">
-                    <a href="/post-a-review/">
-                        <i class='bx bxs-edit icon'></i>
-                        <span class="text nav-text">Post A Review</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="bottom-content">
-            <li class="">
-                <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
-                    <i class='bx bx-log-out icon'></i>
-                    <span class="text nav-text">Logout</span>
-                </a>
-                <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-            <li class="mode">
-                <div class="moon-sun">
-                    <i class='bx bx-moon icon moon'></i>
-                    <i class='bx bx-sun icon sun'></i>
-                </div>
-                <span class="mode-text text">Dark Mode</span>
-                <div class="toggle-switch">
-                    <span class="switch"></span>
-                </div>
-            </li>
-        </div>
-    </div>
-</nav>
+    </nav>
 
-
-{% block content %}
-<!-- Main content goes here -->
-{% endblock %}
-
+    <!-- Main Content -->
+    <main class="content">
+        {% block content %}
+            <!-- Main content goes here -->
+        {% endblock %}
+    </main>
+</div>
 
 <script src="{% static 'js/sidebar.js' %}"></script>
 {% block extra_scripts %}{% endblock %}
