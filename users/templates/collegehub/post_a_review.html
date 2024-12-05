@@ -9,11 +9,11 @@
 {% include "static/html/toast.html" %}
 <div class="wrapper">
     <h3>Post a Review!</h3>
-    <form method="POST" action="#">
+    <form method="POST" action="{% url 'post-a-review' %}">
         {% csrf_token %}
         <div class="company-section">
             <label for="company">Company</label>
-            <input type="text" name="company" id="company" placeholder="Company name...">
+            <input type="text" name="company" id="company" placeholder="Company name..." required aria-label="Company">
         </div>
         <div class="rating">
             <input type="number" name="rating" hidden>
@@ -23,15 +23,14 @@
             <i class='bx bx-star star' style="--i: 3;"></i>
             <i class='bx bx-star star' style="--i: 4;"></i>
         </div>
-        <textarea name="opinion" cols="30" rows="5" placeholder="Your opinion..."></textarea>
+        <textarea name="opinion" cols="30" rows="5" placeholder="Your opinion..." required maxlength="500" aria-label="Opinion"></textarea>
         <div class="btn-group">
             <button type="submit" class="btn submit">Submit</button>
-            <button type="button" class="btn cancel">Cancel</button>
+            <button type="button" class="btn cancel" onclick="window.location.href='{% url 'home' %}'">Cancel</button>
         </div>
     </form>
 </div>
 {% endblock %}
-
 {% block extra_scripts %}
 <script type="text/javascript" src="{% static 'js/review-star.js' %}" defer></script>
 {% endblock %}

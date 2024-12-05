@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
-
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -206,7 +206,7 @@ def post_a_review(request):
                         opinion=opinion,
                     )
                     messages.success(request, 'Your review has been posted successfully!')
-                    return redirect('post-a-review')  # Redirect to a relevant page
+                    return redirect('home')  # Redirect to a relevant page
                 else:
                     messages.error(request, 'Please provide a rating between 1 and 5.')
             except ValueError:
@@ -215,3 +215,22 @@ def post_a_review(request):
             messages.error(request, 'All fields are required.')
 
     return render(request, 'collegehub/post_a_review.html')
+
+@login_required
+def home_view(request):
+    query = request.GET.get('query', '')
+    company = request.GET.get('company', '')
+    rating = request.GET.get('rating', '')
+
+    # Filter reviews based on search parameters
+    reviews = Review.objects.all()
+    if query:
+        reviews = reviews.filter(opinion__icontains=query)
+    if company:
+        reviews = reviews.filter(company__icontains=company)
+    if rating:
+        reviews = reviews.filter(rating=rating)
+
+    context = {'reviews': reviews}
+    return render(request, 'collegehub/home.html', context)
+
