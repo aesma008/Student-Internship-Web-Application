@@ -216,6 +216,7 @@ def post_a_review(request):
 
     return render(request, 'collegehub/post_a_review.html')
 
+
 @login_required
 def home_view(request):
     query = request.GET.get('query', '')
@@ -233,4 +234,3 @@ def home_view(request):
 
     context = {'reviews': reviews}
     return render(request, 'collegehub/home.html', context)
-
