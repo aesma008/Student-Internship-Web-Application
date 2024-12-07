@@ -237,7 +237,13 @@ def home_view(request):
 
     reviews_list = Review.objects.all()
     if query:
-        reviews_list = reviews_list.filter(opinion__icontains=query)
+            reviews_list = reviews_list.filter(
+                Q(title__icontains=query) |
+                Q(company_name__icontains=query) |
+                Q(description__icontains=query) |
+                Q(overall_experience__icontains=query) |
+                Q(opinion__icontains=query)
+                )
     if company:
         reviews_list = reviews_list.filter(company_name__icontains=company)
     if rating:
