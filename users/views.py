@@ -235,20 +235,24 @@ def home_view(request):
     company = request.GET.get('company', '')
     rating = request.GET.get('rating', '')
 
-    reviews_list = Review.objects.all()
+    # Filter for verified reviews
+    reviews_list = Review.objects.filter(is_verified=True)
+
+    # Apply additional filters based on query parameters
     if query:
-            reviews_list = reviews_list.filter(
-                Q(title__icontains=query) |
-                Q(company_name__icontains=query) |
-                Q(description__icontains=query) |
-                Q(overall_experience__icontains=query) |
-                Q(opinion__icontains=query)
-                )
+        reviews_list = reviews_list.filter(
+            Q(title__icontains=query) |
+            Q(company_name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(overall_experience__icontains=query) |
+            Q(opinion__icontains=query)
+        )
     if company:
         reviews_list = reviews_list.filter(company_name__icontains=company)
     if rating:
         reviews_list = reviews_list.filter(rating=rating)
 
+    # Paginate the results
     paginator = Paginator(reviews_list, 5)  # Show 5 reviews per page
     page_number = request.GET.get('page')
     reviews = paginator.get_page(page_number)
@@ -264,5 +268,5 @@ def review_detail(request, review_id):
 
 def my_reviews(request):
     # Filter reviews by the logged-in user
-    reviews = Review.objects.filter(user=request.user)
+    reviews = Review.objects.filter(user=request.user, is_verified=True)
     return render(request, 'collegehub/my_review.html', {'reviews': reviews})

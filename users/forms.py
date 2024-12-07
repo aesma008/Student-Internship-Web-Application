@@ -56,7 +56,6 @@ class ReviewForm(forms.ModelForm):
             "compensation",
             "location",
             "rating",
-            "opinion",
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Describe the internship'}),

@@ -34,8 +34,8 @@ class Review(models.Model):
     compensation = models.CharField(max_length=100)  # Compensation details
     location = models.CharField(max_length=255)  # Location of the internship
     rating = models.PositiveIntegerField()  # Rating (e.g., 1-5)
-    opinion = models.TextField()  # Opinion text
     date_posted = models.DateTimeField(auto_now_add=True)  # Timestamp of when the review was posted
-    
+    is_verified = models.BooleanField(default=False)  # Boolean to track verification status
+
     def __str__(self):
         return f"{self.company_name} - {self.user.username}"
