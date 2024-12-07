@@ -18,20 +18,34 @@
 
     <!-- Search and Actions -->
     <div class="home-actions">
+        <button id="toggle-advanced-search" class="btn-primary">Advanced Filtering</button>
+        <a href="{% url 'post-a-review' %}" class="btn-secondary">Post a Review</a>
+    </div>
+
+    <!-- Advanced Search -->
+    <div id="advanced-search" class="hidden">
         <form method="GET" action="/home/" class="search-form">
             <input type="text" name="query" placeholder="Search by keyword..." value="{{ query }}">
-            <input type="text" name="company" placeholder="Company name..." value="{{ company }}">
+            <input type="text" name="company_name" placeholder="Company name..." value="{{ company_name }}">
+            <input type="text" name="skills_required" placeholder="Required skills..." value="{{ skills_required }}">
+            <select name="compensation">
+                <option value="">Compensation</option>
+                <option value="Paid" {% if compensation == 'Paid' %}selected{% endif %}>Paid</option>
+                <option value="Unpaid" {% if compensation == 'Unpaid' %}selected{% endif %}>Unpaid</option>
+                <option value="Stipend" {% if compensation == 'Stipend' %}selected{% endif %}>Stipend</option>
+            </select>
+            <input type="text" name="location" placeholder="Location..." value="{{ location }}">
             <select name="rating">
                 <option value="">Select Rating</option>
-                <option value="5">5 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="2">2 Stars</option>
-                <option value="1">1 Star</option>
+                <option value="5" {% if rating == '5' %}selected{% endif %}>5 Stars</option>
+                <option value="4" {% if rating == '4' %}selected{% endif %}>4 Stars</option>
+                <option value="3" {% if rating == '3' %}selected{% endif %}>3 Stars</option>
+                <option value="2" {% if rating == '2' %}selected{% endif %}>2 Stars</option>
+                <option value="1" {% if rating == '1' %}selected{% endif %}>1 Star</option>
             </select>
-            <button type="submit" class="btn-primary">Search</button>
+            <button type="submit" class="btn-primary">Apply Filters</button>
+            <a href="/home/" class="btn-secondary">Clear Filters</a>
         </form>
-        <a href="{% url 'post-a-review' %}" class="btn-secondary">Post a Review</a>
     </div>
 
     <!-- Paginated Reviews List -->
@@ -74,4 +88,18 @@
         {% endif %}
     </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const toggleButton = document.getElementById('toggle-advanced-search');
+    const advancedSearch = document.getElementById('advanced-search');
+
+    toggleButton.addEventListener('click', () => {
+        advancedSearch.classList.toggle('hidden');
+        toggleButton.textContent = advancedSearch.classList.contains('hidden') 
+            ? 'Advanced Filtering' 
+            : 'Hide Filters';
+    });
+</script>
 {% endblock %}

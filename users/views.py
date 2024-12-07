@@ -201,6 +201,10 @@ def post_a_review(request):
         compensation = request.POST.get('compensation')
         location = request.POST.get('location')
         rating = request.POST.get('rating')
+        workplace_environment = request.POST.get('workplace_environment')
+        interview_process = request.POST.get('interview_process')
+        interview_tips = request.POST.get('interview_tips')
+        is_anonymous = request.POST.get('is_anonymous') == 'on'
         overall_experience = request.POST.get('overall_experience')
 
         # Validate and save review
@@ -219,6 +223,10 @@ def post_a_review(request):
                     location=location,
                     rating=int(rating),
                     overall_experience=overall_experience,
+                    workplace_environment=workplace_environment,
+                    interview_process=interview_process,
+                    interview_tips=interview_tips,
+                    is_anonymous=is_anonymous
                 )
                 messages.success(request, 'Your review has been posted successfully!')
                 return redirect('home')
@@ -232,23 +240,29 @@ def post_a_review(request):
 @login_required
 def home_view(request):
     query = request.GET.get('query', '')
-    company = request.GET.get('company', '')
+    company_name = request.GET.get('company_name', '')
+    skills_required = request.GET.get('skills_required', '')
+    compensation = request.GET.get('compensation', '')
+    location = request.GET.get('location', '')
     rating = request.GET.get('rating', '')
 
     # Filter for verified reviews
     reviews_list = Review.objects.filter(is_verified=True)
 
-    # Apply additional filters based on query parameters
     if query:
         reviews_list = reviews_list.filter(
-            Q(title__icontains=query) |
-            Q(company_name__icontains=query) |
-            Q(description__icontains=query) |
-            Q(overall_experience__icontains=query) |
-            Q(opinion__icontains=query)
+            Q(title__icontains=query) | 
+            Q(description__icontains=query) | 
+            Q(overall_experience__icontains=query)
         )
-    if company:
-        reviews_list = reviews_list.filter(company_name__icontains=company)
+    if company_name:
+        reviews_list = reviews_list.filter(company_name__icontains=company_name)
+    if skills_required:
+        reviews_list = reviews_list.filter(skills_required__icontains=skills_required)
+    if compensation:
+        reviews_list = reviews_list.filter(compensation__icontains=compensation)
+    if location:
+        reviews_list = reviews_list.filter(location__icontains=location)
     if rating:
         reviews_list = reviews_list.filter(rating=rating)
 
@@ -257,7 +271,16 @@ def home_view(request):
     page_number = request.GET.get('page')
     reviews = paginator.get_page(page_number)
 
-    return render(request, 'collegehub/home.html', {'reviews': reviews})
+    context = {
+        'reviews': reviews,
+        'query': query,
+        'company_name': company_name,
+        'skills_required': skills_required,
+        'compensation': compensation,
+        'location': location,
+        'rating': rating,
+    }
+    return render(request, 'collegehub/home.html', context)
 
 
 @login_required
