@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="review-rating">
-        <label>Rating:</label>
+        <label><b>Rating:</b></label>
         <div class="rating">
             {% for i in "12345" %}
                 {% if forloop.counter <= review.rating %}
@@ -32,27 +32,27 @@
     </div>
     <div class="review-details">
         <div class="detail-section">
-            <label>Description:</label>
+            <label><b>Description:</b></label>
             <p>{{ review.description }}</p>
         </div>
         <div class="detail-section">
-            <label>Skills Required:</label>
+            <label><b>Skills Required:</b></label>
             <p>{{ review.skills_required }}</p>
         </div>
         <div class="detail-section">
-            <label>Skills Learned:</label>
+            <label><b>Skills Learned:</b></label>
             <p>{{ review.skills_learned }}</p>
         </div>
         <div class="detail-section">
-            <label>Duration:</label>
+            <label><b>Duration:</b></label>
             <p>{{ review.duration }}</p>
         </div>
         <div class="detail-section">
-            <label>Compensation:</label>
+            <label><b>Compensation:</b></label>
             <p>{{ review.compensation }}</p>
         </div>
         <div class="detail-section">
-            <label>Overall Experience:</label>
+            <label><b>Overall Experience:</b></label>
             <p>{{ review.overall_experience }}</p>
         </div>
     </div>
