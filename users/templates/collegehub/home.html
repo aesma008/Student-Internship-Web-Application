@@ -5,6 +5,7 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 {% endblock %}
 
 {% block content %}
@@ -40,8 +41,17 @@
             <div class="card-header">
                 <h3>{{ review.title }}</h3>
                 <span class="meta">
-                    {{ review.company_name }} | {{ review.location }}
+                    <i class="fas fa-building"></i> {{ review.company_name }} | <i class="fas fa-map-marker-alt"></i> {{ review.location }}
                 </span>
+            </div>
+            <div class="rating">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        <i class="bx bxs-star" style="color: #FFD700;"></i>
+                    {% else %}
+                        <i class="bx bx-star" style="color: #DDD;"></i>
+                    {% endif %}
+                {% endfor %}
             </div>
             <p class="opinion">{{ review.overall_experience|truncatewords:25 }}</p>
             <a href="{% url 'review_detail' review.id %}" class="btn-secondary">Learn More</a>

@@ -90,13 +90,14 @@
 }
 
 .reviews-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 20px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1000px;
     justify-content: center;
     color: var(--text-color);
+    margin: 0 auto;
 }
 
 .review-card {
@@ -187,4 +188,16 @@
 .pagination span {
     font-size: 14px;
     color: #555;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Spacing between stars */
+    margin: 10px 0; /* Space below the rating section */
+    font-size: 18px; /* Adjust size of the stars */
+}
+
+.rating i {
+    transition: color 0.3s ease;
 }

@@ -5,54 +5,62 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/review.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 {% include "static/html/toast.html" %}
 <div class="wrapper">
-    <h3>{{ review.title }}</h3>
-    <div class="company-section">
-        <label>Company:</label>
-        <p>{{ review.company_name }}</p>
+    <div class="review-header">
+        <h3>{{ review.title }}</h3>
+        <div class="meta">
+            <span><i class="fas fa-building"></i> {{ review.company_name }}</span>
+            <span><i class="fas fa-map-marker-alt"></i> {{ review.location }}</span>
+        </div>
     </div>
-    <div class="company-section">
+    <div class="review-rating">
         <label>Rating:</label>
-        <p>⭐ {{ review.rating }}/5</p>
+        <div class="rating">
+            {% for i in "12345" %}
+                {% if forloop.counter <= review.rating %}
+                    <i class="bx bxs-star" style="color: #FFD700;"></i>
+                {% else %}
+                    <i class="bx bx-star" style="color: #DDD;"></i>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
-    <div class="company-section">
-        <label>Skills Required:</label>
-        <p>{{ review.skills_required }}</p>
+    <div class="review-details">
+        <div class="detail-section">
+            <label>Description:</label>
+            <p>{{ review.description }}</p>
+        </div>
+        <div class="detail-section">
+            <label>Skills Required:</label>
+            <p>{{ review.skills_required }}</p>
+        </div>
+        <div class="detail-section">
+            <label>Skills Learned:</label>
+            <p>{{ review.skills_learned }}</p>
+        </div>
+        <div class="detail-section">
+            <label>Duration:</label>
+            <p>{{ review.duration }}</p>
+        </div>
+        <div class="detail-section">
+            <label>Compensation:</label>
+            <p>{{ review.compensation }}</p>
+        </div>
+        <div class="detail-section">
+            <label>Overall Experience:</label>
+            <p>{{ review.overall_experience }}</p>
+        </div>
     </div>
-    <div class="company-section">
-        <label>Skills Learned:</label>
-        <p>{{ review.skills_learned }}</p>
-    </div>
-    <div class="company-section">
-        <label>Location:</label>
-        <p>{{ review.location }}</p>
-    </div>
-    <div class="company-section">
-        <label>Compensation:</label>
-        <p>{{ review.compensation }}</p>
-    </div>
-    <div class="company-section">
-        <label>Description:</label>
-        <p>{{ review.description }}</p>
-    </div>
-    <div class="company-section">
-        <label>Overall Experience:</label>
-        <p>{{ review.overall_experience }}</p>
-    </div>
-    <div class="company-section">
-        <label>Opinion:</label>
-        <p>{{ review.opinion }}</p>
-    </div>
-    <div class="company-section">
-        <label>Date Posted:</label>
-        <p>{{ review.date_posted|date:"F j, Y" }}</p>
+    <div class="review-footer">
+        <span>Posted on {{ review.date_posted|date:"F j, Y" }}</span>
     </div>
     <div class="btn-group">
-        <button type="button" class="btn cancel" onclick="window.location.href='{% url 'home' %}'">Back</button>
+        <button type="button" class="btn cancel" onclick="window.location.href='{% url 'home' %}'">Back to Listings</button>
     </div>
 </div>
 {% endblock %}
