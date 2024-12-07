@@ -10,14 +10,15 @@ from django.contrib.auth import login, get_user_model, logout, update_session_au
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.safestring import mark_safe
+from django.core.paginator import Paginator
 
 from .decorators import clear_messages, anonymous_required
-from .forms import RegisterForm
+from .forms import RegisterForm, ReviewForm
 from .models import Profile, Review
 from .tokens import account_activation_token
 
@@ -191,29 +192,59 @@ def password_reset_view(request):
 @login_required(login_url="/login/")
 def post_a_review(request):
     if request.method == 'POST':
-        company = request.POST.get('company')
-        rating = request.POST.get('rating')
-        opinion = request.POST.get('opinion')
+        try:
+            # Log incoming data
+            print("POST data:", request.POST)
 
-        if company and rating and opinion:
+            # Retrieve form data
+            title = request.POST.get('title')
+            company_name = request.POST.get('company_name')
+            description = request.POST.get('description')
+            overall_experience = request.POST.get('overall_experience')
+            skills_required = request.POST.get('skills_required')
+            skills_learned = request.POST.get('skills_learned')
+            duration = request.POST.get('duration')
+            compensation = request.POST.get('compensation')
+            location = request.POST.get('location')
+            rating = request.POST.get('rating')
+            opinion = request.POST.get('opinion')
+
+            # Validate required fields
+            if not title or not company_name or not description or not rating or not opinion:
+                messages.error(request, "Please fill out all required fields.")
+                return redirect('post-a-review')
+
+            # Validate rating
             try:
                 rating = int(rating)
-                if 1 <= rating <= 5:  # Validate rating within a range (e.g., 1-5 stars)
-                    review = Review.objects.create(
-                        user=request.user,
-                        company=company,
-                        rating=rating,
-                        opinion=opinion,
-                    )
-                    messages.success(request, 'Your review has been posted successfully!')
-                    return redirect('home')  # Redirect to a relevant page
-                else:
-                    messages.error(request, 'Please provide a rating between 1 and 5.')
+                if rating < 1 or rating > 5:
+                    messages.error(request, "Rating must be between 1 and 5.")
+                    return redirect('post-a-review')
             except ValueError:
-                messages.error(request, 'Invalid rating value. Please enter a number between 1 and 5.')
-        else:
-            messages.error(request, 'All fields are required.')
+                messages.error(request, "Invalid rating value.")
+                return redirect('post-a-review')
 
+            # Create review
+            review = Review.objects.create(
+                user=request.user,
+                title=title,
+                company_name=company_name,
+                description=description,
+                overall_experience=overall_experience,
+                skills_required=skills_required,
+                skills_learned=skills_learned,
+                duration=duration,
+                compensation=compensation,
+                location=location,
+                rating=rating,
+                opinion=opinion,
+            )
+            messages.success(request, "Your review has been posted successfully!")
+            return redirect('home')
+        except Exception as e:
+            print("Error:", e)  # Log the error for debugging
+            messages.error(request, "An error occurred. Please try again.")
+            return redirect('post-a-review')
     return render(request, 'collegehub/post_a_review.html')
 
 
@@ -223,14 +254,22 @@ def home_view(request):
     company = request.GET.get('company', '')
     rating = request.GET.get('rating', '')
 
-    # Filter reviews based on search parameters
-    reviews = Review.objects.all()
+    reviews_list = Review.objects.all()
     if query:
-        reviews = reviews.filter(opinion__icontains=query)
+        reviews_list = reviews_list.filter(opinion__icontains=query)
     if company:
-        reviews = reviews.filter(company__icontains=company)
+        reviews_list = reviews_list.filter(company__icontains=company)
     if rating:
-        reviews = reviews.filter(rating=rating)
+        reviews_list = reviews_list.filter(rating=rating)
 
-    context = {'reviews': reviews}
-    return render(request, 'collegehub/home.html', context)
+    paginator = Paginator(reviews_list, 5)  # Show 5 reviews per page
+    page_number = request.GET.get('page')
+    reviews = paginator.get_page(page_number)
+
+    return render(request, 'collegehub/home.html', {'reviews': reviews})
+
+
+@login_required
+def review_detail(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    return render(request, 'collegehub/review_detail.html', {'review': review})

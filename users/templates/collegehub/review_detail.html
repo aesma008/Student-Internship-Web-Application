@@ -1,0 +1,58 @@
+{% extends 'static/html/base.html' %}
+{% load static %}
+
+{% block title %}Review Details{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/review.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "static/html/toast.html" %}
+<div class="wrapper">
+    <h3>{{ review.title }}</h3>
+    <div class="company-section">
+        <label>Company:</label>
+        <p>{{ review.company_name }}</p>
+    </div>
+    <div class="company-section">
+        <label>Rating:</label>
+        <p>⭐ {{ review.rating }}/5</p>
+    </div>
+    <div class="company-section">
+        <label>Skills Required:</label>
+        <p>{{ review.skills_required }}</p>
+    </div>
+    <div class="company-section">
+        <label>Skills Learned:</label>
+        <p>{{ review.skills_learned }}</p>
+    </div>
+    <div class="company-section">
+        <label>Location:</label>
+        <p>{{ review.location }}</p>
+    </div>
+    <div class="company-section">
+        <label>Compensation:</label>
+        <p>{{ review.compensation }}</p>
+    </div>
+    <div class="company-section">
+        <label>Description:</label>
+        <p>{{ review.description }}</p>
+    </div>
+    <div class="company-section">
+        <label>Overall Experience:</label>
+        <p>{{ review.overall_experience }}</p>
+    </div>
+    <div class="company-section">
+        <label>Opinion:</label>
+        <p>{{ review.opinion }}</p>
+    </div>
+    <div class="company-section">
+        <label>Date Posted:</label>
+        <p>{{ review.date_posted|date:"F j, Y" }}</p>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn cancel" onclick="window.location.href='{% url 'home' %}'">Back</button>
+    </div>
+</div>
+{% endblock %}
