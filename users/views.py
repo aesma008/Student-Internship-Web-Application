@@ -192,59 +192,39 @@ def password_reset_view(request):
 @login_required(login_url="/login/")
 def post_a_review(request):
     if request.method == 'POST':
-        try:
-            # Log incoming data
-            print("POST data:", request.POST)
+        title = request.POST.get('title')
+        company_name = request.POST.get('company_name')
+        description = request.POST.get('description')
+        skills_required = request.POST.get('skills_required')
+        skills_learned = request.POST.get('skills_learned')
+        duration = request.POST.get('duration')
+        compensation = request.POST.get('compensation')
+        location = request.POST.get('location')
+        rating = request.POST.get('rating')
+        overall_experience = request.POST.get('overall_experience')
 
-            # Retrieve form data
-            title = request.POST.get('title')
-            company_name = request.POST.get('company_name')
-            description = request.POST.get('description')
-            overall_experience = request.POST.get('overall_experience')
-            skills_required = request.POST.get('skills_required')
-            skills_learned = request.POST.get('skills_learned')
-            duration = request.POST.get('duration')
-            compensation = request.POST.get('compensation')
-            location = request.POST.get('location')
-            rating = request.POST.get('rating')
-            opinion = request.POST.get('opinion')
-
-            # Validate required fields
-            if not title or not company_name or not description or not rating or not opinion:
-                messages.error(request, "Please fill out all required fields.")
-                return redirect('post-a-review')
-
-            # Validate rating
+        # Validate and save review
+        if all([title, company_name, description, skills_required, skills_learned, duration, location, rating, overall_experience]):
             try:
-                rating = int(rating)
-                if rating < 1 or rating > 5:
-                    messages.error(request, "Rating must be between 1 and 5.")
-                    return redirect('post-a-review')
+                review = Review.objects.create(
+                    user=request.user,
+                    title=title,
+                    company_name=company_name,
+                    description=description,
+                    skills_required=skills_required,
+                    skills_learned=skills_learned,
+                    duration=duration,
+                    compensation=compensation,
+                    location=location,
+                    rating=int(rating),
+                    overall_experience=overall_experience,
+                )
+                messages.success(request, 'Your review has been posted successfully!')
+                return redirect('home')
             except ValueError:
-                messages.error(request, "Invalid rating value.")
-                return redirect('post-a-review')
-
-            # Create review
-            review = Review.objects.create(
-                user=request.user,
-                title=title,
-                company_name=company_name,
-                description=description,
-                overall_experience=overall_experience,
-                skills_required=skills_required,
-                skills_learned=skills_learned,
-                duration=duration,
-                compensation=compensation,
-                location=location,
-                rating=rating,
-                opinion=opinion,
-            )
-            messages.success(request, "Your review has been posted successfully!")
-            return redirect('home')
-        except Exception as e:
-            print("Error:", e)  # Log the error for debugging
-            messages.error(request, "An error occurred. Please try again.")
-            return redirect('post-a-review')
+                messages.error(request, 'Please ensure all fields are valid.')
+        else:
+            messages.error(request, 'All fields marked as required must be filled.')
     return render(request, 'collegehub/post_a_review.html')
 
 

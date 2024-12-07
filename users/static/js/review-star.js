@@ -6,12 +6,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const stars = document.querySelectorAll(".rating .star");
     const ratingInput = document.querySelector("input[name='rating']");
 
-    stars.forEach((star, index) => {
+    stars.forEach((star, idx) => {
         star.addEventListener("click", () => {
-            ratingInput.value = index + 1;
-            stars.forEach((s, i) => {
-                s.classList.toggle("bxs-star", i <= index);
-                s.classList.toggle("bx-star", i > index);
+            ratingInput.value = idx + 1; // Set hidden input value
+            stars.forEach((s, sIdx) => {
+                if (sIdx <= idx) {
+                    s.classList.replace("bx-star", "bxs-star");
+                } else {
+                    s.classList.replace("bxs-star", "bx-star");
+                }
             });
         });
     });
