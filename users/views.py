@@ -239,7 +239,7 @@ def home_view(request):
     if query:
         reviews_list = reviews_list.filter(opinion__icontains=query)
     if company:
-        reviews_list = reviews_list.filter(company__icontains=company)
+        reviews_list = reviews_list.filter(company_name__icontains=company)
     if rating:
         reviews_list = reviews_list.filter(rating=rating)
 
