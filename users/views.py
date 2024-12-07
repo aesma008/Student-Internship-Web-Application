@@ -204,7 +204,8 @@ def post_a_review(request):
         overall_experience = request.POST.get('overall_experience')
 
         # Validate and save review
-        if all([title, company_name, description, skills_required, skills_learned, duration, location, rating, overall_experience]):
+        if all([title, company_name, description, skills_required, skills_learned, duration, location, rating,
+                overall_experience]):
             try:
                 review = Review.objects.create(
                     user=request.user,
@@ -253,3 +254,9 @@ def home_view(request):
 def review_detail(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     return render(request, 'collegehub/review_detail.html', {'review': review})
+
+
+def my_reviews(request):
+    # Filter reviews by the logged-in user
+    reviews = Review.objects.filter(user=request.user)
+    return render(request, 'collegehub/my_review.html', {'reviews': reviews})
