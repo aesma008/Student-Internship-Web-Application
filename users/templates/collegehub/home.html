@@ -1,10 +1,11 @@
 {% extends 'static/html/base.html' %}
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Internship Listings{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 {% endblock %}
 
 {% block content %}
@@ -12,39 +13,93 @@
     {% include "static/html/toast.html" %}
     <div class="home-header">
         <h1>Welcome, {{ user.first_name }}!</h1>
-        <p>Explore internship reviews or share your experience.</p>
+        <p>Explore internship reviews shared by the community.</p>
     </div>
 
+    <!-- Search and Actions -->
     <div class="home-actions">
-        <form method="GET" action="/home/" class="search-form">
-            <input type="text" name="query" placeholder="Search by keyword..." value="{{ query }}">
-            <input type="text" name="company" placeholder="Company name..." value="{{ company }}">
-            <select name="rating">
-                <option value="">Select Rating</option>
-                <option value="5">5 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="2">2 Stars</option>
-                <option value="1">1 Star</option>
-            </select>
-            <button type="submit" class="btn-primary">Search</button>
-        </form>
+        <button id="toggle-advanced-search" class="btn-primary">Advanced Filtering</button>
         <a href="{% url 'post-a-review' %}" class="btn-secondary">Post a Review</a>
     </div>
 
+    <!-- Advanced Search -->
+    <div id="advanced-search" class="hidden">
+        <form method="GET" action="/home/" class="search-form">
+            <input type="text" name="query" placeholder="Search by keyword..." value="{{ query }}">
+            <input type="text" name="company_name" placeholder="Company name..." value="{{ company_name }}">
+            <input type="text" name="skills_required" placeholder="Required skills..." value="{{ skills_required }}">
+            <select name="compensation">
+                <option value="">Compensation</option>
+                <option value="Paid" {% if compensation == 'Paid' %}selected{% endif %}>Paid</option>
+                <option value="Unpaid" {% if compensation == 'Unpaid' %}selected{% endif %}>Unpaid</option>
+                <option value="Stipend" {% if compensation == 'Stipend' %}selected{% endif %}>Stipend</option>
+            </select>
+            <input type="text" name="location" placeholder="Location..." value="{{ location }}">
+            <select name="rating">
+                <option value="">Select Rating</option>
+                <option value="5" {% if rating == '5' %}selected{% endif %}>5 Stars</option>
+                <option value="4" {% if rating == '4' %}selected{% endif %}>4 Stars</option>
+                <option value="3" {% if rating == '3' %}selected{% endif %}>3 Stars</option>
+                <option value="2" {% if rating == '2' %}selected{% endif %}>2 Stars</option>
+                <option value="1" {% if rating == '1' %}selected{% endif %}>1 Star</option>
+            </select>
+            <button type="submit" class="btn-primary">Apply Filters</button>
+            <a href="/home/" class="btn-secondary">Clear Filters</a>
+        </form>
+    </div>
+
+    <!-- Paginated Reviews List -->
     <div class="reviews-container">
         {% for review in reviews %}
         <div class="review-card">
             <div class="card-header">
-                <h3>{{ review.company }}</h3>
-                <span class="rating">⭐ {{ review.rating }}/5</span>
+                <h3>{{ review.title }}</h3>
+                <span class="meta">
+                    <i class="fas fa-building"></i> {{ review.company_name }} | <i class="fas fa-map-marker-alt"></i> {{ review.location }}
+                </span>
             </div>
-            <p class="opinion">{{ review.opinion|truncatewords:25 }}</p>
-            <p class="meta">Posted by {{ review.user.username }} on {{ review.date_posted|date:"F j, Y" }}</p>
+            <div class="rating">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        <i class="bx bxs-star" style="color: #FFD700;"></i>
+                    {% else %}
+                        <i class="bx bx-star" style="color: #DDD;"></i>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <p class="opinion">{{ review.overall_experience|truncatewords:25 }}</p>
+            <a href="{% url 'review_detail' review.id %}" class="btn-secondary">Learn More</a>
         </div>
         {% empty %}
         <p class="no-reviews">No reviews found. Try adjusting your search filters.</p>
         {% endfor %}
     </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if reviews.has_previous %}
+        <a href="?page={{ reviews.previous_page_number }}" class="btn-secondary">Previous</a>
+        {% endif %}
+
+        <span>Page {{ reviews.number }} of {{ reviews.paginator.num_pages }}</span>
+
+        {% if reviews.has_next %}
+        <a href="?page={{ reviews.next_page_number }}" class="btn-primary">Next</a>
+        {% endif %}
+    </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const toggleButton = document.getElementById('toggle-advanced-search');
+    const advancedSearch = document.getElementById('advanced-search');
+
+    toggleButton.addEventListener('click', () => {
+        advancedSearch.classList.toggle('hidden');
+        toggleButton.textContent = advancedSearch.classList.contains('hidden') 
+            ? 'Advanced Filtering' 
+            : 'Hide Filters';
+    });
+</script>
 {% endblock %}

@@ -10,14 +10,15 @@ from django.contrib.auth import login, get_user_model, logout, update_session_au
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.safestring import mark_safe
+from django.core.paginator import Paginator
 
 from .decorators import clear_messages, anonymous_required
-from .forms import RegisterForm
+from .forms import RegisterForm, ReviewForm
 from .models import Profile, Review
 from .tokens import account_activation_token
 
@@ -191,46 +192,104 @@ def password_reset_view(request):
 @login_required(login_url="/login/")
 def post_a_review(request):
     if request.method == 'POST':
-        company = request.POST.get('company')
+        title = request.POST.get('title')
+        company_name = request.POST.get('company_name')
+        description = request.POST.get('description')
+        skills_required = request.POST.get('skills_required')
+        skills_learned = request.POST.get('skills_learned')
+        duration = request.POST.get('duration')
+        compensation = request.POST.get('compensation')
+        location = request.POST.get('location')
         rating = request.POST.get('rating')
-        opinion = request.POST.get('opinion')
+        workplace_environment = request.POST.get('workplace_environment')
+        interview_process = request.POST.get('interview_process')
+        interview_tips = request.POST.get('interview_tips')
+        is_anonymous = request.POST.get('is_anonymous') == 'on'
+        overall_experience = request.POST.get('overall_experience')
 
-        if company and rating and opinion:
+        # Validate and save review
+        if all([title, company_name, description, skills_required, skills_learned, duration, location, rating,
+                overall_experience]):
             try:
-                rating = int(rating)
-                if 1 <= rating <= 5:  # Validate rating within a range (e.g., 1-5 stars)
-                    review = Review.objects.create(
-                        user=request.user,
-                        company=company,
-                        rating=rating,
-                        opinion=opinion,
-                    )
-                    messages.success(request, 'Your review has been posted successfully!')
-                    return redirect('home')  # Redirect to a relevant page
-                else:
-                    messages.error(request, 'Please provide a rating between 1 and 5.')
+                review = Review.objects.create(
+                    user=request.user,
+                    title=title,
+                    company_name=company_name,
+                    description=description,
+                    skills_required=skills_required,
+                    skills_learned=skills_learned,
+                    duration=duration,
+                    compensation=compensation,
+                    location=location,
+                    rating=int(rating),
+                    overall_experience=overall_experience,
+                    workplace_environment=workplace_environment,
+                    interview_process=interview_process,
+                    interview_tips=interview_tips,
+                    is_anonymous=is_anonymous
+                )
+                messages.success(request, 'Your review has been posted successfully!')
+                return redirect('home')
             except ValueError:
-                messages.error(request, 'Invalid rating value. Please enter a number between 1 and 5.')
+                messages.error(request, 'Please ensure all fields are valid.')
         else:
-            messages.error(request, 'All fields are required.')
-
+            messages.error(request, 'All fields marked as required must be filled.')
     return render(request, 'collegehub/post_a_review.html')
 
 
 @login_required
 def home_view(request):
     query = request.GET.get('query', '')
-    company = request.GET.get('company', '')
+    company_name = request.GET.get('company_name', '')
+    skills_required = request.GET.get('skills_required', '')
+    compensation = request.GET.get('compensation', '')
+    location = request.GET.get('location', '')
     rating = request.GET.get('rating', '')
 
-    # Filter reviews based on search parameters
-    reviews = Review.objects.all()
-    if query:
-        reviews = reviews.filter(opinion__icontains=query)
-    if company:
-        reviews = reviews.filter(company__icontains=company)
-    if rating:
-        reviews = reviews.filter(rating=rating)
+    # Filter for verified reviews
+    reviews_list = Review.objects.filter(is_verified=True)
 
-    context = {'reviews': reviews}
+    if query:
+        reviews_list = reviews_list.filter(
+            Q(title__icontains=query) | 
+            Q(description__icontains=query) | 
+            Q(overall_experience__icontains=query)
+        )
+    if company_name:
+        reviews_list = reviews_list.filter(company_name__icontains=company_name)
+    if skills_required:
+        reviews_list = reviews_list.filter(skills_required__icontains=skills_required)
+    if compensation:
+        reviews_list = reviews_list.filter(compensation__icontains=compensation)
+    if location:
+        reviews_list = reviews_list.filter(location__icontains=location)
+    if rating:
+        reviews_list = reviews_list.filter(rating=rating)
+
+    # Paginate the results
+    paginator = Paginator(reviews_list, 5)  # Show 5 reviews per page
+    page_number = request.GET.get('page')
+    reviews = paginator.get_page(page_number)
+
+    context = {
+        'reviews': reviews,
+        'query': query,
+        'company_name': company_name,
+        'skills_required': skills_required,
+        'compensation': compensation,
+        'location': location,
+        'rating': rating,
+    }
     return render(request, 'collegehub/home.html', context)
+
+
+@login_required
+def review_detail(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    return render(request, 'collegehub/review_detail.html', {'review': review})
+
+
+def my_reviews(request):
+    # Filter reviews by the logged-in user
+    reviews = Review.objects.filter(user=request.user, is_verified=True)
+    return render(request, 'collegehub/my_review.html', {'reviews': reviews})

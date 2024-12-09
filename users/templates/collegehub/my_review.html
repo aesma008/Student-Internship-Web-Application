@@ -1,0 +1,38 @@
+{% extends 'static/html/base.html' %}
+{% load static %}
+
+{% block title %}Internship Listings{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+{% endblock %}
+
+{% block content %}
+    <div class="reviews-container">
+        {% for review in reviews %}
+            <div class="review-card">
+                <div class="card-header">
+                    <h3>{{ review.title }}</h3>
+                    <span class="meta">
+                    <i class="fas fa-building"></i> {{ review.company_name }} | <i
+                            class="fas fa-map-marker-alt"></i> {{ review.location }}
+                </span>
+                </div>
+                <div class="rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            <i class="bx bxs-star" style="color: #FFD700;"></i>
+                        {% else %}
+                            <i class="bx bx-star" style="color: #DDD;"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="opinion">{{ review.overall_experience|truncatewords:25 }}</p>
+                <a href="{% url 'review_detail' review.id %}" class="btn-secondary">Learn More</a>
+            </div>
+        {% empty %}
+            <p class="no-reviews">No reviews found. Try adjusting your search filters.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

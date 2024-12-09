@@ -11,25 +11,94 @@
     <h3>Post a Review!</h3>
     <form method="POST" action="{% url 'post-a-review' %}">
         {% csrf_token %}
+
         <div class="company-section">
-            <label for="company">Company</label>
-            <input type="text" name="company" id="company" placeholder="Company name..." required aria-label="Company">
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" placeholder="Review title..." required>
         </div>
-        <div class="rating">
-            <input type="number" name="rating" hidden>
-            <i class='bx bx-star star' style="--i: 0;"></i>
-            <i class='bx bx-star star' style="--i: 1;"></i>
-            <i class='bx bx-star star' style="--i: 2;"></i>
-            <i class='bx bx-star star' style="--i: 3;"></i>
-            <i class='bx bx-star star' style="--i: 4;"></i>
+
+        <div class="company-section">
+            <label for="company_name">Company Name</label>
+            <input type="text" name="company_name" id="company_name" placeholder="Company name..." required>
         </div>
-        <textarea name="opinion" cols="30" rows="5" placeholder="Your opinion..." required maxlength="500" aria-label="Opinion"></textarea>
+
+        <div class="textarea-section">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="4" placeholder="Brief description of the internship..." required></textarea>
+        </div>
+
+        <div class="company-section">
+            <label for="skills_required">Skills Required</label>
+            <input type="text" name="skills_required" id="skills_required" placeholder="E.g., Python, SQL" required>
+        </div>
+
+        <div class="company-section">
+            <label for="skills_learned">Skills Learned</label>
+            <input type="text" name="skills_learned" id="skills_learned" placeholder="E.g., Data Analysis, Machine Learning" required>
+        </div>
+
+        <div class="company-section">
+            <label for="duration">Duration (in months)</label>
+            <input type="number" name="duration" id="duration" placeholder="E.g., 3" min="0" required>
+        </div>
+
+        <div class="company-section">
+            <label for="compensation">Compensation</label>
+            <select name="compensation" id="compensation">
+                <option value="Paid">Paid</option>
+                <option value="Unpaid">Unpaid</option>
+                <option value="Stipend">Stipend</option>
+            </select>
+        </div>
+
+        <div class="company-section">
+            <label for="location">Location</label>
+            <input type="text" name="location" id="location" placeholder="E.g., New York, Remote" required>
+        </div>
+
+        <div class="rating-section">
+            <label>Rating</label>
+            <div class="rating">
+                <input type="number" name="rating" hidden>
+                <i class='bx bx-star star' style="--i: 0;"></i>
+                <i class='bx bx-star star' style="--i: 1;"></i>
+                <i class='bx bx-star star' style="--i: 2;"></i>
+                <i class='bx bx-star star' style="--i: 3;"></i>
+                <i class='bx bx-star star' style="--i: 4;"></i>
+            </div>
+        </div>
+        <div class="textarea-section">
+            <label for="workplace_environment">Workplace Environment</label>
+            <textarea name="workplace_environment" id="workplace_environment" rows="4" placeholder="Describe the culture and team dynamics..."></textarea>
+        </div>
+        
+        <div class="textarea-section">
+            <label for="interview_process">Interview Process</label>
+            <textarea name="interview_process" id="interview_process" rows="4" placeholder="Describe the recruitment stages and questions..."></textarea>
+        </div>
+        
+        <div class="textarea-section">
+            <label for="interview_tips">Interview Tips</label>
+            <textarea name="interview_tips" id="interview_tips" rows="3" placeholder="Pro tips for future applicants..."></textarea>
+        </div>
+        
+        <div class="company-section">
+            <label for="is_anonymous">Post Anonymously</label>
+            <input type="checkbox" name="is_anonymous" id="is_anonymous">
+        </div>
+
+        <div class="textarea-section">
+            <label for="overall_experience">Overall Experience</label>
+            <textarea name="overall_experience" id="overall_experience" rows="4" placeholder="Describe your overall experience..." required></textarea>
+        </div>
+
         <div class="btn-group">
             <button type="submit" class="btn submit">Submit</button>
             <button type="button" class="btn cancel" onclick="window.location.href='{% url 'home' %}'">Cancel</button>
         </div>
     </form>
 </div>
+
 {% endblock %}
 {% block extra_scripts %}
 <script type="text/javascript" src="{% static 'js/review-star.js' %}" defer></script>
